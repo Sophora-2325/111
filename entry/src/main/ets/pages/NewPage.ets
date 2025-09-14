@@ -1,4 +1,6 @@
 import router from '@ohos.router';
+import  { preferences}  from '@kit.ArkData';
+
 @Entry
 @Component
 struct NewPage {
@@ -6,10 +8,23 @@ struct NewPage {
   // 分别存储三个字段的值
   @State eventName: string = "事件名"
   @State timeLength: string = "时间长度"
+
   @State startTime: string = "开始时间"
 
   @State tempText: string = "" // 临时存储输入内容
   @State currentType: string = "" // 记录当前点击的按钮类型
+  // 类内添加存储实例
+  private pref: preferences.Preferences = preferences.getPreferencesSync(this.context, { name: 'EventConfig' });
+
+  async aboutToAppear() { // 新增生命周期方法
+    try {
+      this.eventName = await this.pref.get('eventName', '事件名');
+      this.timeLength = await this.pref.get('timeLength', '时间长度');
+      this.startTime = await this.pref.get('startTime', '开始时间');
+    } catch (err) {
+      console.error(`数据加载失败: ${JSON.stringify(err)}`);
+    }
+  }
   // 弹窗控制器，显式指定类型
   dialogController: CustomDialogController = new CustomDialogController({
     builder: (): void => this.DialogBuilder(),
@@ -30,18 +45,22 @@ struct NewPage {
         })
 
       Button('确认修改')
-        .onClick((): void => {
+        .onClick(async (): Promise<void> => {
           switch(this.currentType) {
             case "事件名":
               this.eventName = this.tempText;
+              await this.pref.put("eventName", this.tempText);
               break;
             case "时间长度":
               this.timeLength = this.tempText;
+              await this.pref.put("timeLength", this.tempText);
               break;
             case "开始时间":
               this.startTime = this.tempText;
+              await this.pref.put("startTime", this.tempText);
               break;
           }
+          await this.pref.flush(); // 确保数据持久化
           this.tempText = "";
           this.dialogController.close();
         })
