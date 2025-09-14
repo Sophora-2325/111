@@ -1,8 +1,8 @@
 import router from '@ohos.router';
-////
 @Entry
 @Component
-struct Second {
+struct NewPage {
+
   // 分别存储三个字段的值
   @State eventName: string = "事件名"
   @State timeLength: string = "时间长度"
@@ -10,13 +10,13 @@ struct Second {
 
   @State tempText: string = "" // 临时存储输入内容
   @State currentType: string = "" // 记录当前点击的按钮类型
-
-
   // 弹窗控制器，显式指定类型
   dialogController: CustomDialogController = new CustomDialogController({
     builder: (): void => this.DialogBuilder(),
     cancel: (): void => console.log("取消弹窗")
   })
+
+
 
   // 为构建器显式指定返回类型
   @Builder

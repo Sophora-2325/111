@@ -14,7 +14,7 @@ struct main {
               .margin({ left: 15 })
               .onClick(() => {
                 let uiContext = this.getUIContext();
-                uiContext.getRouter().pushUrl({ url: 'pages/Second' })
+                uiContext.getRouter().pushUrl({ url: 'pages/NewPage' })
               })
           }
           .height(60)
