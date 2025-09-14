@@ -1,23 +1,42 @@
 @Entry
 @Component
-struct Index {
-  @State message: string = 'Hello World';
+struct main {
+  @State events: string[] = [];
 
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('HelloWorld')
-        .fontSize($r('app.float.page_text_font_size'))
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
+    Column() {
+      List() {
+        ForEach(this.events, (item: string, index: number) => {
+          ListItem() {
+            Button(`事件${index + 1}`)
+              .fontSize(18)
+              .width('90%')
+              .margin({ left: 15 })
+              .onClick(() => {
+                let uiContext = this.getUIContext();
+                uiContext.getRouter().pushUrl({ url: 'pages/Second' })
+              })
+          }
+          .height(60)
+          .borderRadius(12)
+          .backgroundColor(Color.White)
+          .margin({ top: 8, bottom: 8 })
         })
+      }
+      .width('100%')
+      .layoutWeight(1)
+      .divider({ strokeWidth: 1, color: 0xCCCCCC })
+
+      Button('添加事件')
+        .width(120)
+        .height(40)
+        .margin(20)
         .onClick(() => {
-          this.message = 'Welcome';
+          this.events.push(`事件${this.events.length + 1}`);
         })
     }
-    .height('100%')
     .width('100%')
+    .height('100%')
+    .backgroundColor('#F5F5F5')
   }
 }
